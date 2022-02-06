@@ -21,7 +21,8 @@ public class GameInfoListener {
     @RabbitListener(queues = AmqpConfiguration.GAME_INFO_QUEUE)
     public void onMessage (Message mess) throws IOException {
 
-        IndexRequest request = new IndexRequest("games", mess.getMessageProperties().getHeader("game_id") );
+        IndexRequest request = new IndexRequest("games");
+        request.id(mess.getMessageProperties().getHeader("game_id") );
         request.source(mess.getBody(), XContentType.JSON);
         Bob.index(request, RequestOptions.DEFAULT);
     }
